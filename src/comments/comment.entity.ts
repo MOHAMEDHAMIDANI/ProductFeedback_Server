@@ -9,10 +9,10 @@ export class Comment {
     id : string;
     @Column()
     content : string;
-    @ManyToOne(type => User , user => user.comments, {eager : false} )
+    @ManyToOne(type => User , user => user.comments)
     user : User;
-    @ManyToOne(type =>Feedback, feedback => feedback.comments, {eager : true} )
+    @ManyToOne(type =>Feedback, feedback => feedback.comments, )
     feedback : Feedback;
-    @OneToMany(type => Reply, reply => reply.comment, {eager : false} )
+    @OneToMany(type => Reply, reply => reply.comment, { eager : true })
     replies : Reply[];
 }
