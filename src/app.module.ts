@@ -10,6 +10,9 @@ import { RepliesService } from './replies/replies.service';
 import { RepliesModule } from './replies/replies.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Feedback } from './feedback/Feedback.entity';
+import { User } from './user/User.entity';
+import { Comment } from './comments/Comment.entity';
+import { Reply } from './replies/reply.entity';
 
 @Module({
   imports: [FeedbackModule, UserModule, CommentsModule, RepliesModule, TypeOrmModule.forRoot({
@@ -20,7 +23,7 @@ import { Feedback } from './feedback/Feedback.entity';
     password: 'mohamed',
     database: 'Feedback',
     synchronize: true,
-    entities: [Feedback],
+    entities: [Feedback , User , Comment , Reply],
     autoLoadEntities: true,
   })],
   controllers: [FeedbackController, CommentsController],

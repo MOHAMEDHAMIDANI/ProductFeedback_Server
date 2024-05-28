@@ -11,8 +11,8 @@ export class User {
     email : string;
     @Column()
     password : string;
-    @OneToMany(type => Feedback, feedback => feedback.user , {eager : true} )
+    @OneToMany(type => Feedback, feedback => feedback.user , { eager : true })
     feedback : Feedback[] ;
-    @OneToMany(type => Comment, comment => comment.user, {eager : true} )
+    @OneToMany(type => Comment, comment => comment.user,)
     comments : Comment[] ;
 }
