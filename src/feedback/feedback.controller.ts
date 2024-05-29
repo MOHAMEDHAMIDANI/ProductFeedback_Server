@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './Dto/createFeedback.dto';
 import { UpdateFeedbackDto } from './Dto/updateFeedback.dto';
 import { Feedback } from './Feedback.entity';
+import { feedbackFilterDto } from './Dto/feedbackFilter.dto';
 
 @Controller('feedback')
 export class FeedbackController {
@@ -20,5 +21,17 @@ export class FeedbackController {
     @Put("/:id")
     async UpdateFeedback(@Param("id") id : string, @Body() UpdateFeedback: UpdateFeedbackDto) : Promise<Feedback>{
         return await this.feedbackService.UpdateFeedback(id, UpdateFeedback)
+    }
+    @Get('/filtering')
+    async GetFeedbacksWithFilter(@Query() FeedbackFilter: feedbackFilterDto): Promise<Feedback[]> {
+        return await this.feedbackService.GetFeedbacksWithFilter(FeedbackFilter);
+    }
+    @Put("/like/:id")
+    async LikeAndUnlike(@Param("id") id : string, @Body('like') LikeAndUnlikeBoolean : boolean) : Promise<Feedback> {
+        return await this.feedbackService.LikeAndUnlike(id, LikeAndUnlikeBoolean)
+    }
+    @Delete("/:id")
+    async DeleteFeedback(@Param("id") id : string) : Promise<Feedback> {
+        return await this.feedbackService.DeleteFeedback(id)
     }
 }

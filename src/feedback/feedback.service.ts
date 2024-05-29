@@ -9,7 +9,7 @@ import { feedbackFilterDto } from './Dto/feedbackFilter.dto';
 
 @Injectable()
 export class FeedbackService {
-    constructor(@InjectRepository(Feedback) private FeedbackRepository: Repository<Feedback>) {
+    constructor(@InjectRepository(Feedback) private FeedbackRepository: Repository<Feedback> ,) {
 
     }
     async CreateFeedback(CreateFeedback: CreateFeedbackDto) : Promise<Feedback> {
@@ -28,10 +28,20 @@ export class FeedbackService {
         const feedback : Feedback = await this.FeedbackRepository.findOne({where: {id: id}})
         return feedback 
     }
-    async GetFeedbacksWithFilter(id: string , FeedbackFilter : feedbackFilterDto) : Promise<Feedback[]> { 
-        const {search , status , category} = FeedbackFilter
-        const feedback : Feedback[] = await this.FeedbackRepository.find({where: {id: id}})
-        return feedback 
+    async GetFeedbacksWithFilter(FeedbackFilter: feedbackFilterDto): Promise<Feedback[]> { 
+        const { search, status, category } = FeedbackFilter;
+        const feedbackQuery = this.FeedbackRepository.createQueryBuilder('feedback');
+        if (search) {
+            feedbackQuery.andWhere('(LOWER(feedback.title) LIKE LOWER(:search) OR LOWER(feedback.description) LIKE LOWER(:search))', { search: `%${search}%` });
+        }
+        if (status) {
+            feedbackQuery.andWhere('feedback.status = :status', { status });
+        }
+        if (category) {
+            feedbackQuery.andWhere('feedback.category = :category', { category });
+        }
+        const feedback: Feedback[] = await feedbackQuery.getMany();
+        return feedback;
     }
     async UpdateFeedback(id : string, UpdateFeedback : UpdateFeedbackDto) : Promise<Feedback> {
         const {title , description , category} = UpdateFeedback 
@@ -42,5 +52,21 @@ export class FeedbackService {
         await this.FeedbackRepository.save(feedback)
         return feedback
     }
-
+    
+    async LikeAndUnlike(id : string , LikeAndUnlikeBoolean : boolean) {
+        const feedback : Feedback = await this.FeedbackRepository.findOne({where: {id: id}})
+        if(LikeAndUnlikeBoolean){
+            feedback.likes = feedback.likes + 1
+        }
+        else{
+            feedback.likes = feedback.likes - 1
+        }
+        await this.FeedbackRepository.save(feedback)
+        return feedback
+    }
+    async DeleteFeedback(id : string) {
+        const feedback : Feedback = await this.FeedbackRepository.findOne({where: {id: id}})
+        await this.FeedbackRepository.remove(feedback)
+        return feedback
+    }
 }
