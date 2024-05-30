@@ -4,10 +4,10 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 export class Reply {
     @PrimaryGeneratedColumn('uuid')
     id: string;
+
     @Column()
     content: string;
-    @OneToMany(type => Reply, reply => reply.replies,)
-    replies: Reply[];
+
     @ManyToOne(() => Comment, (comment) => comment.replies)
     comment: Comment;
 }

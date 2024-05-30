@@ -6,13 +6,17 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 @Entity()
 export class Comment {
     @PrimaryGeneratedColumn('uuid')
-    id : string;
+    id: string;
+
     @Column()
-    content : string;
-    @ManyToOne(type => User , user => user.comments)
-    user : User;
-    @ManyToOne(type =>Feedback, feedback => feedback.comments, )
-    feedback : Feedback;
-    @OneToMany(type => Reply, reply => reply.comment, { eager : true })
-    replies : Reply[];
+    content: string;
+
+    @ManyToOne(() => User, (user) => user.comments)
+    user: User;
+
+    @ManyToOne(() => Feedback, (feedback) => feedback.comments)
+    feedback: Feedback;
+
+    @OneToMany(() => Reply, (reply) => reply.comment, { eager: true })
+    replies: Reply[];
 }

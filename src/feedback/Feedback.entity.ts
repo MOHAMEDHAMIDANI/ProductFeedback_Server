@@ -6,19 +6,26 @@ import { Comment } from "src/comments/Comment.entity";
 @Entity()
 export class Feedback {
     @PrimaryGeneratedColumn('uuid')
-    id : string;
+    id: string;
+
     @Column()
-    title : string;
+    title: string;
+
     @Column()
-    description : string;
+    description: string;
+
     @Column()
-    status : Status ;
+    status: string; // Assuming enum or similar, adjust accordingly
+
     @Column()
-    category : Category ;
+    category: string; // Assuming enum or similar, adjust accordingly
+
     @Column()
-    likes : number ;
-    @ManyToOne(type => User, user => user.feedback,)
-    user : User
-    @OneToMany(type => Comment, comment => comment.feedback, { eager : true })
-    comments : Comment[];
+    likes: number;
+
+    @ManyToOne(() => User, (user) => user.feedback)
+    user: User;
+
+    @OneToMany(() => Comment, (comment) => comment.feedback, { eager: true })
+    comments: Comment[];
 }
