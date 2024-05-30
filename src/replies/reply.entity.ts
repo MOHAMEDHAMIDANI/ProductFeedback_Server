@@ -3,11 +3,11 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 @Entity()
 export class Reply {
     @PrimaryGeneratedColumn('uuid')
-    id : string;
+    id: string;
     @Column()
-    content : string;
+    content: string;
     @OneToMany(type => Reply, reply => reply.replies,)
-    replies : Reply[];
-    @ManyToOne(type => Comment, comment => comment.replies)
-    comment : Comment;
+    replies: Reply[];
+    @ManyToOne(() => Comment, (comment) => comment.replies)
+    comment: Comment;
 }

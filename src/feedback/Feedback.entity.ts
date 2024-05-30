@@ -19,6 +19,6 @@ export class Feedback {
     likes : number ;
     @ManyToOne(type => User, user => user.feedback,)
     user : User
-    @OneToMany(type => Comment, comment => comment.user, { eager : true })
+    @OneToMany(type => Comment, comment => comment.feedback, { eager : true })
     comments : Comment[];
 }
