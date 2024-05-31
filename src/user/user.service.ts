@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './Dto/CreateUser.dto';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from './Dto/LogInUser.dto';
 @Injectable()
 export class UserService {
     constructor(@InjectRepository(User) private UserRepository : Repository<User> ){
@@ -16,7 +17,7 @@ export class UserService {
             return undefined
         }
     }
-    async CreateUser(UserDto : CreateUserDto){
+    async CreateUser(UserDto : CreateUserDto) :Promise<void> {
         const { name , email , password } = UserDto
         const salt = await bcrypt.genSalt()
         const hashedPassword = await bcrypt.hash(password, salt)
@@ -32,5 +33,16 @@ export class UserService {
             }
         }
     }
-
+    async LogInUser(UserDto : LoginDto){
+        const { email, password } = UserDto
+        const user = await this.findOne(email)
+        if (!user) {
+            throw new InternalServerErrorException()
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+        if (!isPasswordValid) {
+            throw new InternalServerErrorException()
+        }
+        return "you are in mother fucker"
+    }
 }
