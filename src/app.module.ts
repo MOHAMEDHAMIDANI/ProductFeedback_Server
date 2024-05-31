@@ -13,6 +13,7 @@ import { Feedback } from './feedback/Feedback.entity';
 import { User } from './user/User.entity';
 import { Comment } from './comments/Comment.entity';
 import { Reply } from './replies/reply.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [FeedbackModule, UserModule, CommentsModule, RepliesModule, TypeOrmModule.forRoot({
@@ -25,7 +26,7 @@ import { Reply } from './replies/reply.entity';
     synchronize: true,
     entities: [Feedback , User , Comment , Reply],
     autoLoadEntities: true,
-  })],
+  }), AuthModule],
   controllers: [FeedbackController, CommentsController],
   providers: [FeedbackService, CommentsService, RepliesService],
 })
