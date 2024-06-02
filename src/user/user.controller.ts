@@ -3,10 +3,11 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './Dto/CreateUser.dto';
 import { LoginDto } from './Dto/LogInUser.dto';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('user')
 export class UserController {
-    constructor(private userServices: UserService) {}
+    constructor(private userServices: UserService , private authService : AuthService) {}
 
     @Post('/signup')
     createUser(@Body() userDto: CreateUserDto): Promise<void> {
@@ -16,6 +17,6 @@ export class UserController {
     @UseGuards(LocalAuthGuard)
     @Post('/login')
     logInUser(@Request() req) {
-        return req.user;
+        return this.authService.Login(req.user)
     }
 }

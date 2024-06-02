@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { validateUser } from './Dto/validate.dto';
 import * as bcrypt from 'bcrypt';
-
+import { User } from 'src/user/User.entity';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
-    constructor(private userServices: UserService) {}
+    constructor(private userServices: UserService,
+        private jwtService: JwtService) {
+
+    }
 
     async validateUser(userCoordinate: validateUser): Promise<any> {
         const { email, password } = userCoordinate;
@@ -32,5 +36,12 @@ export class AuthService {
             return result;
         }
         return null;
+    }
+    async Login(user: User) {
+        const payload = { email: user.email, sub: user.id }; // Usually, it's good practice to use a "sub" claim for the user ID.
+        const accessToken = this.jwtService.sign(payload);
+        return {
+            access_token: accessToken,
+        };
     }
 }

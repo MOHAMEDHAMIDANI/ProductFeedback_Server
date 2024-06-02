@@ -32,4 +32,4 @@ import { Reply } from './replies/reply.entity';
     controllers: [],
     providers: [],
 })
-export class AppModule {}
+export class AppModule { }
