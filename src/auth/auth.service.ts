@@ -13,24 +13,15 @@ export class AuthService {
 
     async validateUser(userCoordinate: validateUser): Promise<any> {
         const { email, password } = userCoordinate;
-        console.log('User Coordinate:', userCoordinate); // Log input
-
         const user = await this.userServices.findOne(email);
         if (!user) {
-            console.log('User not found'); // Log if user not found
             return null;
         }
-        console.log('Retrieved User:', user); // Log user data
-
-        // Ensure both arguments to bcrypt.compare are defined and valid
         if (!password || !user.password) {
-            console.error('Password or user.password is undefined');
             return null;
         }
 
-        const isValidPassword = await bcrypt.compare(password, user.password); // Correct order
-        console.log('IsValidPassword:', isValidPassword); // Log password check result
-
+        const isValidPassword = await bcrypt.compare(password, user.password); 
         if (isValidPassword) {
             const { password, ...result } = user;
             return result;
@@ -38,7 +29,7 @@ export class AuthService {
         return null;
     }
     async Login(user: User) {
-        const payload = { email: user.email, sub: user.id }; // Usually, it's good practice to use a "sub" claim for the user ID.
+        const payload = { email: user.email, sub: user.id };
         const accessToken = this.jwtService.sign(payload);
         return {
             access_token: accessToken,
